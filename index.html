@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMK Negeri 7 Batam</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        :root { --primary: #1a56db; --secondary: #0e4c8f; --accent: #f59e0b; --light: #f3f4f6; --dark: #1f2937; }
+        body { background: var(--light); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+        
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 1rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; }
+        .school-name { font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .school-motto { font-style: italic; font-size: 0.9rem; margin-bottom: 1rem; }
+        
+        .hamburger { position: absolute; top: 1rem; right: 1rem; display: none; flex-direction: column; justify-content: space-between; width: 30px; height: 21px; cursor: pointer; z-index: 1000; }
+        .hamburger span { height: 3px; width: 100%; background: white; border-radius: 10px; transition: all 0.3s; }
+        
+        nav { background: white; padding: 1rem 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; }
+        nav ul li { margin: 0 1rem; }
+        nav ul li a { color: var(--dark); text-decoration: none; font-weight: 500; padding: 0.5rem 0; display: block; transition: color 0.3s; }
+        nav ul li a:hover { color: var(--primary); }
+        
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 70%; height: 100vh; background: linear-gradient(135deg, var(--primary), var(--secondary)); z-index: 999; padding: 4rem 1rem; transition: right 0.3s; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+        .mobile-nav.active { right: 0; }
+        .mobile-nav ul { flex-direction: column; }
+        .mobile-nav ul li { margin: 1rem 0; }
+        .mobile-nav ul li a { color: white; font-size: 1.2rem; padding: 0.8rem; border-radius: 5px; transition: background 0.3s; }
+        .mobile-nav ul li a:hover { background: rgba(255,255,255,0.1); }
+        .close-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: white; background: none; border: none; cursor: pointer; }
+        
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .overlay.active { opacity: 1; visibility: visible; }
+        
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        section { background: white; border-radius: 8px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h2 { color: var(--primary); margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent); }
+        
+        .hero { text-align: center; padding: 3rem 2rem; background: linear-gradient(rgba(26,86,219,0.9), rgba(14,76,143,0.9)); color: white; border-radius: 8px; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto 2rem; }
+        .btn { display: inline-block; background: var(--accent); color: white; padding: 0.8rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold; transition: all 0.3s; }
+        .btn:hover { background: #e69008; transform: translateY(-2px); }
+        
+        .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .program-card { background: var(--light); border-radius: 8px; padding: 1.5rem; text-align: center; transition: all 0.3s; border-left: 4px solid var(--primary); }
+        .program-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        .program-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary); }
+        .program-card h3 { color: var(--secondary); margin-bottom: 1rem; }
+        
+        .contact-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .contact-card { background: var(--light); padding: 1.5rem; border-radius: 8px; text-align: center; transition: transform 0.3s; }
+        .contact-card:hover { transform: translateY(-5px); }
+        .contact-icon { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+        
+        footer { background: var(--dark); color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .social-links { margin: 1.5rem 0; }
+        .social-links a { display: inline-block; margin: 0 0.5rem; color: white; font-size: 1.5rem; transition: all 0.3s; }
+        .social-links a:hover { color: var(--accent); transform: translateY(-3px); }
+        
+        .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 99; }
+        .back-to-top.active { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background: var(--secondary); transform: translateY(-3px); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fadeIn 1s ease-out; }
+        section { scroll-margin-top: 100px; }
+        
+        @media (max-width: 768px) {
+            .school-name { font-size: 1.5rem; }
+            .school-motto { font-size: 0.8rem; }
+            .hamburger { display: flex; }
+            nav ul { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .programs-grid, .contact-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="school-name">SMK NEGERI 7 BATAM</div>
+        <div class="school-motto">"Inovatif Dan Berbudaya"</div>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#home" class="nav-link">Beranda</a></li>
+            <li><a href="#about" class="nav-link">Tentang</a></li>
+            <li><a href="#programs" class="nav-link">Program</a></li>
+            <li><a href="#contact" class="nav-link">Kontak</a></li>
+        </ul>
+    </nav>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <button class="close-btn" id="closeBtn">✕</button>
+        <ul>
+            <li><a href="#home" class="nav-link">Beranda</a></li>
+            <li><a href="#about" class="nav-link">Tentang</a></li>
+            <li><a href="#programs" class="nav-link">Program</a></li>
+            <li><a href="#contact" class="nav-link">Kontak</a></li>
+        </ul>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="back-to-top" id="backToTop">↑</div>
+    
+    <div class="container">
+        <section id="home" class="hero">
+            <h1>Selamat Datang di SMK Negeri 7 Batam</h1>
+            <p>Sekolah Menengah Kejuruan yang menghasilkan lulusan berkompeten, berkarakter, dan siap bersaing di dunia kerja.</p>
+            <a href="#programs" class="btn">Lihat Program Kami</a>
+        </section>
+        
+        <section id="about">
+            <h2>Tentang Kami</h2>
+            <p>SMK Negeri 7 Batam adalah sekolah kejuruan negeri di Kota Batam, Kepulauan Riau, yang fokus pada pendidikan berkualitas sesuai kebutuhan industri. Dengan fasilitas modern dan guru profesional, kami siap mencetak generasi yang kompeten serta berdaya saing global.</p>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">📊</div>
+                    <h3>Visi</h3>
+                    <p>Menjadi SMK pusat keunggulan dengan lulusan berkompetensi, berkarakter, inovatif , dan berbudaya.</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🎯</div>
+                    <h3>Misi</h3>
+                    <p>Menyelenggarakan pendidikan kejuruan berkualitas untuk optimalisasi potensi siswa.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="programs">
+            <h2>Program Keahlian</h2>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-icon">💻</div>
+                    <h3>Teknik Komputer dan Jaringan</h3>
+                    <p>Mempersiapkan teknisi jaringan komputer handal.</p>
+                </div>
+                <div class="program-card">
+                    <div class="program-icon">📱</div>
+                    <h3>Rekayasa Perangkat Lunak</h3>
+                    <p>Fokus pengembangan software dan pemrograman.</p>
+                </div>
+                <div class="program-card">
+                    <div class="program-icon">🎬</div>
+                    <h3>Desain komunikasi visual</h3>
+                    <p>Desain grafis, animasi, dan produksi konten.</p>
+                </div>
+                <div class="program-card">
+                    <div class="program-icon">🔌</div>
+                    <h3>Teknik Kelistrikan</h3>
+                    <p>Instalasi dan perbaikan peralatan elektronika.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2>Kontak Kami</h2>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Alamat</h3>
+                    <p>Perumahan Sekawan Pemko,
+Kelurahan, Belian, Kec. Batam Kota,
+Kota Batam, Prov. Kepulauan Riau</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📫</div>
+                    <h3>Kode pos</h3>
+                    <p>29463</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email</h3>
+                    <p>smknegeri7batam@gmail.com</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 SMK Negeri 7 Batam. Semua Hak Dilindungi.</p>
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="YouTube">📺</a>
+            </div>
+            <p>Website SMK Negeri 7 Batam</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('overlay');
+        
+        hamburger.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            overlay.classList.add('active');
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                mobileNav.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+        
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) backToTop.classList.add('active');
+            else backToTop.classList.remove('active');
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        
+        // Animation Observer
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('animate');
+            });
+        });
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
